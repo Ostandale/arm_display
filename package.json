@@ -11,17 +11,26 @@
     "tauri": "tauri"
   },
   "dependencies": {
-    "@tauri-apps/api": "^1.4.0"
+    "@google-web-components/google-chart": "^5.0.5",
+    "@tauri-apps/api": "^1.4.0",
+    "chart.js": "^4.4.0",
+    "googleapis": "^126.0.1",
+    "readline": "^1.3.0",
+    "svelte-chartjs": "^3.1.2"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.4.2",
+    "@tauri-apps/cli": "^1.4.0",
     "@tsconfig/svelte": "^5.0.0",
     "svelte": "^4.0.5",
     "svelte-check": "^3.4.6",
     "svelte-preprocess": "^5.0.0",
     "tslib": "^2.6.0",
     "typescript": "^5.0.2",
-    "vite": "^4.4.4",
-    "@tauri-apps/cli": "^1.4.0"
-  }
+    "vite": "^4.4.4"
+  },
+  "description": "This template should help get you started developing with Tauri, Svelte and TypeScript in Vite.",
+  "main": "svelte.config.js",
+  "author": "",
+  "license": "ISC"
 }

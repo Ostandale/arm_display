@@ -7,6 +7,17 @@ fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
+#[derive(Default)]
+struct MyState {
+    s: std::sync::Mutex<String>,
+    t: std::sync::Mutex<std::collections::HashMap<String, String>>,
+}
+// remember to call `.manage(MyState::default())`
+#[tauri::command]
+async fn get_google_spreadsheet() -> Result<(), Box<dyn std::error::Error>> {
+    Ok(())
+}
+
 fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![greet])

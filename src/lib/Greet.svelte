@@ -1,19 +1,15 @@
 <script lang="ts">
-  import { invoke } from "@tauri-apps/api/tauri"
-
-  let name = "";
-  let greetMsg = ""
-
-  async function greet(){
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    greetMsg = await invoke("greet", { name })
-  }
+  import { invoke } from "@tauri-apps/api/tauri";
 </script>
 
 <div>
-  <form class="row" on:submit|preventDefault={greet}>
-    <input id="greet-input" placeholder="Enter a name..." bind:value={name} />
-    <button type="submit">Greet</button>
-  </form>
-  <p>{greetMsg}</p>
+  <h3>開発カレンダー</h3>
+  <iframe
+    src="https://calendar.google.com/calendar/embed?src=30e8c3932f6b64009e81d925b22c2eeeef12d183b2e73c6f2dab6f6ef52f0f9d%40group.calendar.google.com&ctz=Asia%2FTokyo"
+    style="border: 0"
+    width="1000"
+    height="600"
+    frameborder="0"
+    scrolling="no"
+  />
 </div>
