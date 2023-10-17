@@ -4,6 +4,7 @@
   import Screen3 from "./lib/Screen3.svelte";
   import Screen4 from "./lib/Screen4.svelte";
   import Screen5 from "./lib/Screen5.svelte";
+  import Screen6 from "./lib/Screen6.svelte";
 
   let showScreen = [true, false, false, false, false];
 
@@ -28,21 +29,21 @@
   name="google-signin-client_id"
   content="630326421714-66iri050l6psed860ut27nos2p1g1ggi.apps.googleusercontent.com"
 /> -->
-<main class="container">
+<main class="container1">
   {#if showScreen[0]}
     <div><Screen1 /></div>
   {/if}
   {#if showScreen[1]}
-    <div><Screen2 /></div>
+    <div><Screen5 /></div>
   {/if}
   {#if showScreen[2]}
-    <div><Screen3 /></div>
+    <div><Screen5 /></div>
   {/if}
   {#if showScreen[3]}
-    <div><Screen4 /></div>
+    <div><Screen6 /></div>
   {/if}
   {#if showScreen[4]}
-    <div><Screen5 /></div>
+    <div><Screen6 /></div>
   {/if}
   <!-- <div class="g-signin2" data-onsuccess="onSignIn" />
 
@@ -70,9 +71,10 @@
 </main>
 
 <style>
-  .container {
-    width: 1200px;
-    height: 1200px;
-    margin: 5px auto;
+  .container1 {
+    width: 100%;
+    height: 100%;
+    vertical-align: top;
+    padding: 2px auto;
   }
 </style>

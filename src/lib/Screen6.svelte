@@ -1,21 +1,19 @@
 <script lang="ts">
-    import Chart4 from "./Chart_BulletChart.svelte";
-    import Chart5 from "./Chart_GaugeChart.svelte";
-    import Chart6 from "./Chart_ComboChart.svelte";
-    import ScrollNews from "./Scroll_news.svelte";
+    import Chart1 from "./Chart_BarChart.svelte";
+    import Chart2 from "./Chart_HoriBarChart.svelte";
+    import Chart3 from "./Chart_FlootHoriBarChart.svelte";
 </script>
 
 <main>
-    <ScrollNews />
     <div class="container2">
         <div class="custom">
-            <Chart4 />
+            <Chart1 />
         </div>
-        <div class="custom1">
-            <Chart5 />
+        <div class="custom">
+            <Chart2 />
         </div>
         <div class="custom2">
-            <Chart6 />
+            <Chart3 />
         </div>
     </div>
 </main>
@@ -30,19 +28,13 @@
         border: 1px solid red;
     }
     .custom {
-        width: 1500px;
-        height: 650px;
-        border: 1px solid blue;
-    }
-
-    .custom1 {
-        width: 600px;
-        height: 650px;
+        width: 1100px;
+        height: 600px;
         border: 1px solid blue;
     }
     .custom2 {
         width: 2400px;
-        height: 1600;
+        height: 1500;
         border: 1px solid green;
     }
 </style>

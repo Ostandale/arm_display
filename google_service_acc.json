@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "lunar-tube-401007",
+  "private_key_id": "6008b1f0f0d6c2598297bd698cf0c476f788177b",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDDMqv14Y9IX2AI\neyR1LaCmtnyecfFCTiq9+UrUWMPH0xcPFgJcNDJZhImZacEZ59NiRi655MgF920l\n/8jIBXBQ27EWGJ9z3lbmBCGkBNK2viPY3iE9Tuhdh8VV+CUBVw8tic+E4fz+Q6cS\nfiM0zhbboJ6fNKrw8B35WUg9uW8aGp065oTGPRYHoQcvP40IBRNLdlIXljPKgL+o\nZ5DF/5VAqxH+1HehyD4FB3+eFRQbgbHF44QNuIsisMdnMvomzQgGxleJ7ty140Ll\n290nKTwqigbp280mc8u3RR5hgMOz1LolICtGoTrpYPFQQUdgvgxXrQPZE2Xo3r/2\njmmqImirAgMBAAECggEAHIoWFlcqSdyX/+VxSSioqndX9RqXuagQG8KNLErmJRs5\n7dy775s6GViFfca2kwEQKPg18LwAes7YSIwDYStaZpgYZjCnb5t8fRjxijeiT1Gx\nkA26MmqNEs+9DHrBflaqQ3A4xSb9hHeDv/JtV1Uihm4PgxuCOsQAvepN46hvFBO6\nqdjkwCH/HAYUnh4mth4dtzRU0fuVJGs+Ev74kyQJDexuRMJvDhaHz1iNcYWRq2m7\nAgXOyfI5VF84xt4V+cJYFq3ErDSi04Vm74l3tRb0gQkcmuzcdm5NW7nDWnhyrK9L\nHlvwUp8zpTL/nKL6iPn1xA03NilBHZobgW3mjAhNAQKBgQDopb8tJSs+z2FRg+s0\naJ0u8Xn070fcOxS8xhGwNh0AgOHVWww8SaAZ/9owXHcKUpT7cvrUgpTiHnoGGuzd\nvSX0dXD8WVJXj25R0PdgL9VtSZvKNOVbCYiECk+7ptLBr4FzJ1XqFzINSb0pTspA\nk9zMxezSqm6orbozC8igMAejwQKBgQDWyplafLcGIkGCXiajbCQW3UVMzGO9IyfD\nc8Dqf2lIIGhbVQ5Jwemt/Sb7vNyGC4TTgVIkTWWCeZe0ysgJ7ckCwyMlYg5OUr9B\na6hlR7ok6CeHCCxFCLNk5yvOOzFRHyZYUCgDIk1mrgyz+leu50NHbHs6qBXglMWE\nHOi7sWK3awKBgBw5l6MTglahdE4echeupXs/gqtLqG04ocBxS04UkpowCLYI0Mgz\nqn/dAYyiezK+aCLFhVbo7MUuK2G4PIp+Wy94XBfRgmLrHNhCQPDjfMJAju0OU9Ei\nq/RRB/FdQO6Mq2jcGdlHrSPdkVyEmZcSGVSioqPAV6KRSSjOQi3lBdhBAoGAebkO\n9yy+PAelwE/C7dIXEa4L293omAMYQbeTmFDkRS+4dCnbkwkFeMiCEx+QiZZ1i7c5\n6cDCyhJGWvqgKqBKzfnwLPtIyDI0mMp+AAeKAehenjOPgv/PSluHg7Qf2q0geePT\nCROjcZEpOcWhc0kz44Iiw7cFzuQAm0IW0mdQXkkCgYByzGxvfP9+KMgPt/r1APMT\nCo4mmby3GJga9X6haVENcWQNGyaz1Jw5mr00Sx8f4Nxse407f5V/4+f/OZ47HT/6\nREFS/gpz+C5f4MYNtm0yxx1AFZ33rP/zEi8fndzYySeF6q4Qdl+R8ep6QjSjxFFm\nKM+BKPis63PFjaLPbk9Dow==\n-----END PRIVATE KEY-----\n",
+  "client_email": "seidenbot@lunar-tube-401007.iam.gserviceaccount.com",
+  "client_id": "115141394784574974191",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/seidenbot%40lunar-tube-401007.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
