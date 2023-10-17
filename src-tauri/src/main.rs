@@ -22,6 +22,8 @@ use google_sheets4::Sheets;
 
 use fetch_data::parse_spreadsheet_data::parse_spreadsheet_data;
 
+use dotenvy::dotenv;
+use std::env;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use config::DATA_REFRESH_INTERVAL;
@@ -31,8 +33,11 @@ use struct_data::MAX_GRAPH_NUMBER;
 
 #[tokio::main]
 async fn main() {
+    dotenv().ok();
+    let root_path = env::var("ROOT_PATH").expect("環境変数のパスがおかしい");
+    let data_path = env::var("DATA_PATH").expect("環境変数のパスがおかしい");
     //  *   GCP 認証手続き
-    let (auth, client) = auth().await;
+    let (auth, client) = auth(root_path).await;
     let mut sheet = Sheets::new(client.clone(), auth);
 
     let thread = tokio::spawn(async move {
@@ -53,9 +58,14 @@ async fn main() {
                 {
                     *last_update_time = epoch_time;
 
-                    let result =
-                        parse_spreadsheet_data(&sheet, SPREADSHEET_ID, config, *last_update_time)
-                            .await;
+                    let result = parse_spreadsheet_data(
+                        &sheet,
+                        SPREADSHEET_ID,
+                        config,
+                        *last_update_time,
+                        &data_path,
+                    )
+                    .await;
                     let mut graph_list: Vec<GraphData> = Vec::new();
                 }
             }

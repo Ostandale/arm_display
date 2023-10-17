@@ -23,11 +23,15 @@ pub async fn auth1(
         .expect("could not create an authenticator");
 }
 
-pub async fn auth() -> (
+pub async fn auth(
+    root_path: String,
+) -> (
     Authenticator<hyper_rustls::HttpsConnector<hyper::client::HttpConnector>>,
     Client<HttpsConnector<HttpConnector>>,
 ) {
-    let credentials_data = yup_oauth2::read_service_account_key("../google_service_acc.json")
+    let path = format!("{}google_service_acc.json", root_path);
+    println!("root_path{}", path);
+    let credentials_data = yup_oauth2::read_service_account_key(path)
         .await
         .expect("サービスアカウントキーの読み込み失敗");
     let client: hyper::Client<hyper_rustls::HttpsConnector<hyper::client::HttpConnector>> =

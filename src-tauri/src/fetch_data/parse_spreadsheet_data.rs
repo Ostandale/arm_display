@@ -24,6 +24,7 @@ pub async fn parse_spreadsheet_data(
     spreadsheet_id: &str,
     config: &FetchSpreadSheetConfig,
     update_epoch_time: u64,
+    data_path: &String,
 ) -> core::result::Result<(), Error> {
     let mut results: Vec<std::result::Result<(), std::io::Error>> = Vec::new();
 
@@ -36,7 +37,7 @@ pub async fn parse_spreadsheet_data(
     //  グラフ用オプションファイルの作成
     let option_file = make_option_file_data(config, update_epoch_time).await;
     //
-    let result = write_javascript_data_file(data_file, option_file, config).await;
+    let result = write_javascript_data_file(data_file, option_file, config, data_path).await;
     results.push(result);
 
     if results.iter().any(|result| result.is_err()) {
@@ -169,16 +170,19 @@ async fn write_javascript_data_file(
     graph_data: String,
     option_data: String,
     config: &FetchSpreadSheetConfig,
+    data_path: &String,
 ) -> std::result::Result<(), Error> {
     //  データファイルの書き込み
     let result_data_write = write_file(
         &format!("data_{}", config.save_graph_data_name),
         &graph_data,
+        data_path,
     )
     .await;
     let result_option_write = write_file(
         &format!("options_{}", config.save_graph_data_name),
         &option_data,
+        data_path,
     )
     .await;
 
@@ -194,8 +198,8 @@ async fn write_javascript_data_file(
 //  !   //-------------------------------------------------------------------
 //  *   実際にデータを書き込む
 //  !   //-------------------------------------------------------------------
-async fn write_file(file_name: &str, data: &str) -> Result<(), Error> {
-    let file_path = format!(".././src/lib/{}.js", file_name);
+async fn write_file(file_name: &str, data: &str, data_path: &String) -> Result<(), Error> {
+    let file_path = format!("{}{}.js", data_path, file_name);
     let result = tokio::fs::write(file_path, data).await;
 
     if result.is_ok() {

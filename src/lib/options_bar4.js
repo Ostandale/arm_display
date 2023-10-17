@@ -11,7 +11,7 @@
             bottom: {
                 mapsTo: 'value',
                 extendLinearDomainBy: 'marker',
-                title :' 最終更新時間 2023-10-17 11:52:36'
+                title :' 最終更新時間 2023-10-17 15:30:56'
             },
         },
         bars: {

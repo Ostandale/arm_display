@@ -20,7 +20,7 @@ export default {
         bottom: {
           mapsTo: 'date',
           scaleType: 'labels',
-          title: ' 最終更新時間 2023-10-17 11:52:37'
+          title: ' 最終更新時間 2023-10-17 15:30:57'
         },
     },
     comboChartTypes: [

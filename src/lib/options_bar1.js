@@ -10,7 +10,7 @@
             bottom: {
                 scaleType: ScaleTypes.LABELS,
                 mapsTo: 'group',
-                title: ' 最終更新時間 2023-10-17 11:52:34'
+                title: ' 最終更新時間 2023-10-17 15:30:55'
             },
         },
         bars: {
