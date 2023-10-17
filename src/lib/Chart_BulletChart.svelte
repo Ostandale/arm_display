@@ -1,8 +1,8 @@
 <script lang="ts">
     import { BulletChart } from "@carbon/charts-svelte";
     import "@carbon/charts-svelte/styles.css";
-    import options from "./options_bar4.js";
-    import data from "./data_bar4.js";
+    import options from "../options_bar4.js";
+    import data from "../data_bar4.js";
 </script>
 
 <div>
