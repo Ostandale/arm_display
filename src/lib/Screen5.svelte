@@ -11,7 +11,7 @@
         <div class="custom">
             <Chart4 />
         </div>
-        <div class="custom1">
+        <div class="custom11">
             <Chart5 />
         </div>
         <div class="custom2">
@@ -35,8 +35,8 @@
         border: 1px solid blue;
     }
 
-    .custom1 {
-        width: 600px;
+    .custom11 {
+        width: 650px;
         height: 650px;
         border: 1px solid blue;
     }

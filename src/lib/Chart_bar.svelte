@@ -1,7 +1,7 @@
 <script lang="ts">
     import { BarChartSimple } from "@carbon/charts-svelte";
     import "@carbon/charts-svelte/styles.css";
-    import options from "./options_bar.js";
+    import options from "/HOME./options_bar.js";
     import data from "./data_bar1.js";
 </script>
 

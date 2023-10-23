@@ -1,5 +1,7 @@
 use crate::struct_data::FetchSpreadSheetConfig;
 use chrono::{TimeZone, Utc};
+use serde::{Deserialize, Serialize};
+use serde_json;
 
 //  todo    //-------------------------------------------------------------------
 //  todo    //-------------------------------------------------------------------
@@ -7,19 +9,33 @@ use chrono::{TimeZone, Utc};
 //  todo    //-------------------------------------------------------------------
 //  todo    //-------------------------------------------------------------------
 
-pub async fn make_data_bar(fetch_label: Vec<String>, fetch_data: Vec<String>) -> String {
-    let mut graph_data: String;
+//  JSON用構造体
+#[derive(Serialize, Deserialize, Debug, Clone)]
+struct JsonData {
+    group: String,
+    value: i32,
+}
 
-    let js_code_header = String::from("export default [\n");
-    let js_code_footer = "]";
-    graph_data = js_code_header;
+pub async fn make_data_bar(fetch_label: Vec<String>, fetch_data: Vec<String>) -> String {
+    let mut graph_data: Vec<JsonData> = Vec::new();
 
     for (label, data) in fetch_label.iter().zip(fetch_data.iter()) {
-        graph_data.push_str(&format!("{{\n\tgroup: '{}',\n", label));
-        graph_data.push_str(&format!("\tvalue: {}\n}},\n", data));
+        let check_number = data.parse::<i32>();
+        match check_number {
+            Ok(number) => {
+                let data = JsonData {
+                    group: label.to_string(),
+                    value: number,
+                };
+                graph_data.push(data);
+            }
+            Err(e) => {
+                eprint!("パース失敗 : {}", e);
+            }
+        }
     }
-    graph_data.push_str(js_code_footer);
-    graph_data
+    let json_data = serde_json::to_string(&graph_data).unwrap();
+    json_data
 }
 
 //  todo    //-------------------------------------------------------------------
@@ -34,34 +50,33 @@ pub async fn make_option_bar(config: &FetchSpreadSheetConfig, update_epoch_time:
     let format_time = japan_time
         .format(" 最終更新時間 %Y-%m-%d %H:%M:%S")
         .to_string();
-    let option_data_head = r#"
-    import { ScaleTypes } from "@carbon/charts-svelte";
-    import { ChartTheme } from "@carbon/charts-svelte";
-    export default {
-        title: '"#
+
+    let option_data_head = r#"{
+        "title": ""#
         .to_string();
 
-    let option_data_mid = r#"',
-        axes: {
-            left: {
-                mapsTo: 'value'
+    let option_data_mid = r#"",
+        "axes": {
+            "left": {
+                "mapsTo": "value"
             },
-            bottom: {
-                scaleType: ScaleTypes.LABELS,
-                mapsTo: 'group',
-                title: '"#;
+            "bottom": {
+                "scaleType": "labels",
+                "mapsTo": "group",
+                "title": ""#;
 
-    let option_data_foot = r#"'
-            },
+    let option_data_foot = r#""
+            }
         },
-        bars: {
-            spacingFactor: 0.6,
-            maxWidth: 100
+        "bars": {
+            "spacingFactor": 0.6,
+            "maxWidth": 100
         },
-        height: "400px",
-        theme: ChartTheme.G90
+        "height": "400px",
+        "theme": "g90"
     }
     "#;
-
-    option_data_head + &config.sheet_name + option_data_mid + &format_time + option_data_foot
+    let option_str =
+        option_data_head + &config.sheet_name + option_data_mid + &format_time + option_data_foot;
+    serde_json::to_string(&option_str).unwrap()
 }

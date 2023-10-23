@@ -1,38 +1,56 @@
 use crate::struct_data::FetchSpreadSheetConfig;
 use chrono::{TimeZone, Utc};
 
+use serde::ser::{SerializeMap, SerializeStruct, Serializer};
+use serde::{Deserialize, Serialize};
+use serde_json::json;
+
 //  todo    //-------------------------------------------------------------------
 //  todo    //-------------------------------------------------------------------
 //  todo    コンボグラフ
 //  todo    //-------------------------------------------------------------------
 //  todo    //-------------------------------------------------------------------
 
-pub async fn make_data_combo(fetch_label: Vec<String>, fetch_data: Vec<String>) -> String {
-    let mut graph_data: String;
+//  JSON用構造体
+#[derive(Serialize, Deserialize, Clone)]
+struct MyData1 {
+    group: String,
+    date: String,
+    value1: i32,
+}
+#[derive(Serialize, Deserialize, Clone)]
+struct MyData2 {
+    group: String,
+    date: String,
+    value2: i32,
+}
 
-    let js_code_header = String::from("export default [\n");
-    let js_code_footer = "]";
-    graph_data = js_code_header;
+pub async fn make_data_combo(fetch_label: Vec<String>, fetch_data: Vec<String>) -> String {
+    let mut graph_data: Vec<serde_json::Value> = Vec::new();
 
     let data_length = fetch_label.len();
-    println!("fetchdata: {:?}", fetch_label);
     for (index, label) in fetch_label.iter().enumerate() {
         let data1 = &fetch_data[index];
         let data2 = &fetch_data[data_length + index];
 
-        graph_data.push_str(&format!("{{\n\tgroup: '{}',\n", label));
-        graph_data.push_str(&format!("\tdate: \"{}\",\n", data1));
-
-        if index % 2 == 0 {
-            graph_data.push_str(&format!("\tvalue1: {},\n", &data2));
+        let json_obj = if index % 2 == 0 {
+            let data = MyData1 {
+                group: label.to_string(),
+                date: data1.to_string(),
+                value1: data2.parse::<i32>().unwrap(),
+            };
+            serde_json::to_value(&data).unwrap()
         } else {
-            graph_data.push_str(&format!("\tvalue2: {},\n", &data2));
-        }
-
-        graph_data.push_str("\t\n},\n");
+            let data = MyData2 {
+                group: label.to_string(),
+                date: data1.to_string(),
+                value2: data2.parse::<i32>().unwrap(),
+            };
+            serde_json::to_value(&data).unwrap()
+        };
+        graph_data.push(json_obj);
     }
-    graph_data.push_str(js_code_footer);
-    graph_data
+    serde_json::to_string(&graph_data).unwrap()
 }
 
 //  todo    //-------------------------------------------------------------------
@@ -47,61 +65,58 @@ pub async fn make_option_combo(config: &FetchSpreadSheetConfig, update_epoch_tim
     let format_time = japan_time
         .format(" 最終更新時間 %Y-%m-%d %H:%M:%S")
         .to_string();
-    let option_data_head = r#"
-import { ScaleTypes } from "@carbon/charts-svelte";
-import { ChartTheme } from "@carbon/charts-svelte";
-export default {
-    title: '"#
+    let option_data_head = r#"{
+    "title": ""#
         .to_string();
 
-    let option_data_mid = r#"',
-    axes: {
-        left: {
-          mapsTo: 'value1',
-          scaleType: 'linear',
-          title: '左縦軸タイトル'
+    let option_data_mid = r#"",
+    "axes": {
+        "left": {
+          "mapsTo": "value1",
+          "scaleType": "linear",
+          "title": "左縦軸タイトル"
         },
-        right: {
-          mapsTo: 'value2',
-          scaleType: 'linear',
-          title: '右縦軸タイトル',
-          correspondingDatasets: [
-            'グラフB'
+        "right": {
+          "mapsTo": "value2",
+          "scaleType": "linear",
+          "title": "右縦軸タイトル",
+          "correspondingDatasets": [
+            "グラフB"
           ]
         },
-        bottom: {
-          mapsTo: 'date',
-          scaleType: 'labels',
-          title: '"#;
+        "bottom": {
+          "mapsTo": "date",
+          "scaleType": "labels",
+          "title": ""#;
 
-    let option_data_foot = r#"'
-        },
+    let option_data_foot = r#""
+        }
     },
-    comboChartTypes: [
+    "comboChartTypes": [
     {
-      type: 'simple-bar',
-      correspondingDatasets: [
-        'グラフA'
+      "type": "simple-bar",
+      "correspondingDatasets": [
+        "グラフA"
       ]
     },
     {
-      type: 'line',
-      options: {
-        points: {
-          radius: 5
+      "type": "line",
+      "options": {
+        "points": {
+          "radius": 5
         }
       },
-      correspondingDatasets: [
-        'グラフB'
+      "correspondingDatasets": [
+        "グラフB"
       ]
     }
   ],
-    bars: {
-        spacingFactor: 0.15,
-        maxWidth: 300
+    "bars": {
+        "spacingFactor": 0.15,
+        "maxWidth": 300
     },
-    height: "700px",
-    theme: ChartTheme.G90
+    "height": "700px",
+    "theme": "g90"
 }
 "#;
 

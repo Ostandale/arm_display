@@ -16,6 +16,7 @@ use crate::credential::auth::auth;
 use struct_data::FetchSpreadSheetConfig;
 use struct_data::GraphData;
 
+use tauri_command::fetch_google_spreadsheet::fetch_spreadsheet_data;
 use tauri_command::greet::greet;
 
 use google_sheets4::Sheets;
@@ -75,7 +76,7 @@ async fn main() {
     });
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![greet, fetch_spreadsheet_data])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

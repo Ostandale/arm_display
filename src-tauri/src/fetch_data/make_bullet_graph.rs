@@ -1,5 +1,7 @@
 use crate::struct_data::FetchSpreadSheetConfig;
 use chrono::{TimeZone, Utc};
+use serde::{Deserialize, Serialize};
+use serde_json;
 
 //  todo    //-------------------------------------------------------------------
 //  todo    //-------------------------------------------------------------------
@@ -7,38 +9,37 @@ use chrono::{TimeZone, Utc};
 //  todo    //-------------------------------------------------------------------
 //  todo    //-------------------------------------------------------------------
 
-pub async fn make_data_bullet(fetch_label: Vec<String>, fetch_data: Vec<String>) -> String {
-    let mut graph_data: String;
+//  JSON用構造体
+#[derive(Debug, Serialize, Deserialize, Clone)]
+struct JsonData {
+    group: String,
+    ranges: Vec<i32>,
+    marker: i32,
+    value: i32,
+}
 
-    let js_code_header = String::from("export default [\n");
-    let js_code_footer = "]";
-    graph_data = js_code_header;
+pub async fn make_data_bullet(fetch_label: Vec<String>, fetch_data: Vec<String>) -> String {
+    let mut graph_data: Vec<JsonData> = Vec::new();
 
     let data_length = fetch_label.len();
     for (i, label) in fetch_label.iter().enumerate() {
-        let data = &fetch_data[i].replace('/', "-");
-        let data_range1 = &fetch_data[data_length + i];
-        let data_range2 = &fetch_data[data_length * 2 + i];
-        let data_range3 = &fetch_data[data_length * 3 + i];
-        let data_marker = &fetch_data[data_length * 4 + i];
+        let data_value = fetch_data[i].replace('/', "-").parse::<i32>().unwrap();
+        let data_range1 = fetch_data[data_length + i].parse::<i32>().unwrap();
+        let data_range2 = fetch_data[data_length * 2 + i].parse::<i32>().unwrap();
+        let data_range3 = fetch_data[data_length * 3 + i].parse::<i32>().unwrap();
+        let data_marker = fetch_data[data_length * 4 + i].parse::<i32>().unwrap();
 
-        graph_data.push_str(&format!("{{\n\tgroup: '{}',\n", label));
-        graph_data.push_str("\tranges: [\n");
-        graph_data.push_str(&format!("\t\t{},\n", data_range1));
-        graph_data.push_str(&format!("\t\t{},\n", data_range2));
-        graph_data.push_str(&format!("\t\t{}\n", data_range3));
-        graph_data.push_str("\t],\n");
+        let data = JsonData {
+            group: label.to_string(),
+            ranges: vec![data_range1, data_range2, data_range3],
+            marker: data_marker,
+            value: data_value,
+        };
 
-        graph_data.push_str(&format!("\t\tmarker: {},\n", data_marker));
-
-        graph_data.push_str(&format!("\t\tvalue: {}\n", data));
-
-        graph_data.push_str("\n},\n");
+        graph_data.push(data);
     }
-    graph_data.push_str(js_code_footer);
-    graph_data
+    serde_json::to_string(&graph_data).unwrap()
 }
-
 //  todo    //-------------------------------------------------------------------
 //  *   横棒グラフ　弾丸タイプのオプション作成
 //  todo    //-------------------------------------------------------------------
@@ -51,35 +52,35 @@ pub async fn make_option_bullet(config: &FetchSpreadSheetConfig, update_epoch_ti
     let format_time = japan_time
         .format(" 最終更新時間 %Y-%m-%d %H:%M:%S")
         .to_string();
-    let option_data_head = r#"
-    import { ScaleTypes } from "@carbon/charts-svelte";
-    import { ChartTheme } from "@carbon/charts-svelte";
-    export default {
-        title: '"#
+
+    let option_data_head = r#"{
+        "title": ""#
         .to_string();
 
-    let option_data_mid = r#"',
-        axes: {
-            left: {
-                mapsTo: 'group',
-                scaleType: ScaleTypes.LABELS,
+    let option_data_mid = r#"",
+        "axes": {
+            "left": {
+                "mapsTo": "group",
+                "scaleType": "labels"
             },
-            bottom: {
-                mapsTo: 'value',
-                extendLinearDomainBy: 'marker',
-                title :'"#;
+            "bottom": {
+                "mapsTo": "value",
+                "extendLinearDomainBy": "marker",
+                "title" :""#;
 
-    let option_data_foot = r#"'
-            },
+    let option_data_foot = r#""
+            }
         },
-        bars: {
-            spacingFactor: 0.6,
-            maxWidth: 300
+        "bars": {
+            "spacingFactor": 0.6,
+            "maxWidth": 300
         },
-        height: "600px",
-        theme: ChartTheme.G90
+        "height": "600px",
+        "theme": "g90"
     }
     "#;
 
-    option_data_head + &config.sheet_name + option_data_mid + &format_time + option_data_foot
+    let option_str =
+        option_data_head + &config.sheet_name + option_data_mid + &format_time + option_data_foot;
+    serde_json::to_string(&option_str.trim()).unwrap()
 }

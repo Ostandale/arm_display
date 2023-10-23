@@ -1,5 +1,7 @@
 use crate::struct_data::FetchSpreadSheetConfig;
 use chrono::{TimeZone, Utc};
+use serde::{Deserialize, Serialize};
+use serde_json;
 
 //  todo    //-------------------------------------------------------------------
 //  todo    //-------------------------------------------------------------------
@@ -7,28 +9,32 @@ use chrono::{TimeZone, Utc};
 //  todo    //-------------------------------------------------------------------
 //  todo    //-------------------------------------------------------------------
 
+//  JSON用構造体
+#[derive(Serialize, Deserialize, Debug, Clone)]
+struct JsonData {
+    group: String,
+    value: i32,
+}
+
 pub async fn make_data_gauge(fetch_label: Vec<String>, fetch_data: Vec<String>) -> String {
-    let mut graph_data: String;
+    let mut graph_data: Vec<JsonData> = Vec::new();
 
-    let js_code_header = String::from("export default [\n");
-    let js_code_footer = "]";
-    graph_data = js_code_header;
-
-    for (index, _label) in fetch_label.iter().enumerate() {
-        let data = &fetch_data[index];
-
-        graph_data.push_str("{\n");
-        if index == 0 {
-            graph_data.push_str("\tgroup: \"value\",\n");
-        } else {
-            graph_data.push_str("\tgroup: \"delta\",\n");
+    for (label, data) in fetch_label.iter().zip(fetch_data.iter()) {
+        let check_number = data.parse::<i32>();
+        match check_number {
+            Ok(number) => {
+                let data = JsonData {
+                    group: label.to_string(),
+                    value: number,
+                };
+                graph_data.push(data);
+            }
+            Err(e) => {
+                eprint!("パース失敗 : {}", e);
+            }
         }
-        graph_data.push_str(&format!("\tvalue: {}\n", data));
-
-        graph_data.push_str("\n},\n");
     }
-    graph_data.push_str(js_code_footer);
-    graph_data
+    serde_json::to_string(&graph_data).unwrap()
 }
 
 //  todo    //-------------------------------------------------------------------
@@ -43,22 +49,26 @@ pub async fn make_option_gauge(config: &FetchSpreadSheetConfig, update_epoch_tim
     let format_time = japan_time
         .format(" 最終更新時間 %Y-%m-%d %H:%M:%S")
         .to_string();
-    let option_data_head = r#"
-    import { ChartTheme } from "@carbon/charts-svelte";
-    export default {
-        title: '"#
+    let option_data_head = r#"{
+        "title": ""#
         .to_string();
 
-    let option_data_foot = r#"',
-        resizable: true,
-        height: "600px",
-        gauge: {
-            status: 'warning',
-            type: 'full'
+    let option_data_foot = r#"",
+        "resizable": true,
+        "height": "600px",
+        "width": "100%",
+        "gauge": {
+            "status": "warning",
+            "type": "full"
         },
-        theme: ChartTheme.G90
+        "bars": {
+            "spaceingFactor": 0.15,
+            "maxWidth": 50
+        },
+        "theme": "g90"
     }
     "#;
 
-    option_data_head + &config.sheet_name + &format_time + option_data_foot
+    let option_str = option_data_head + &config.sheet_name + &format_time + option_data_foot;
+    serde_json::to_string(&option_str).unwrap()
 }

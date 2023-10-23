@@ -203,7 +203,6 @@ async fn write_file(file_name: &str, data: &str, data_path: &String) -> Result<(
     let result = tokio::fs::write(file_path, data).await;
 
     if result.is_ok() {
-        println!("成功");
     } else if let Err(e) = &result {
         eprintln!("ファイル書き込みエラー： {}", e);
     }

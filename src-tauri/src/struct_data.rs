@@ -22,7 +22,7 @@ impl FetchSpreadSheetConfig {
                 fetch_range: String::from("30"),
                 graph_pattern: "bar",
                 save_graph_data_name: "bar1",
-                update_interval: 30,
+                update_interval: 10,
             },
             FetchSpreadSheetConfig {
                 priv_key: String::from("credentials.json"),
